@@ -1,5 +1,5 @@
 {
-  "name": "dropcss",
+  "name": "@freddy38510/dropcss",
   "version": "1.0.16",
   "description": "An exceptionally fast, thorough and tiny unused-CSS cleaner",
   "main": "./dist/dropcss.cjs.js",

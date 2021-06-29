@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 const ver = "v" + pkg.version;
-const urlVer = "https://github.com/leeoniya/dropcss (" + ver + ")";
+const urlVer = "https://github.com/freddy38510/dropcss (" + ver + ")";
 const banner = [
 	"/**",
 	"* Copyright (c) " + new Date().getFullYear() + ", Leon Sorokin",

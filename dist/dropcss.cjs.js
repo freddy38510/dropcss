@@ -1,10 +1,10 @@
 /**
-* Copyright (c) 2020, Leon Sorokin
+* Copyright (c) 2021, Leon Sorokin
 * All rights reserved. (MIT Licensed)
 *
 * dropcss.js (DropCSS)
 * An exceptionally fast, thorough and tiny unused-CSS cleaner
-* https://github.com/leeoniya/dropcss (v1.0.16)
+* https://github.com/freddy38510/dropcss (v2.0.0)
 */
 
 'use strict';
@@ -29,7 +29,7 @@ var RE = {
 	CLOSE: /\s*<\/[\w-]+>\s*/myi,
 };
 
-function tokenize(html) {
+function tokenize$1(html) {
 	var pos = 0, m, m2, tokens = [];
 
 	function syncPos(re) {
@@ -165,7 +165,7 @@ function build(tokens, each) {
 	return targ;
 }
 
-function postProc(node, idx, ctx) {
+function postProc$1(node, idx, ctx) {
 	// add index for fast positional testing, e.g. :nth-child
 	node.idx = idx;
 
@@ -192,7 +192,7 @@ function postProc(node, idx, ctx) {
 var _export_parse_ = function (html) {
 	html = html.replace(NASTIES, '');
 
-	var tokens = tokenize(html);
+	var tokens = tokenize$1(html);
 
 	var ctx = {
 		nodes: [],
@@ -201,7 +201,7 @@ var _export_parse_ = function (html) {
 		attr: new Set(),
 	};
 
-	var tree = build(tokens, function (node, idx) { return postProc(node, idx, ctx); });
+	build(tokens, function (node, idx) { return postProc$1(node, idx, ctx); });
 
 	return ctx;
 };
@@ -278,7 +278,7 @@ function takeUntilMatchedClosing(css, pos, op, cl) {
 	return chunk;
 }
 
-function tokenize$1(css) {
+function tokenize(css) {
 	// TODO: dry out with selector regexes?
 	var RE = {
 		RULE_HEAD:	/\s*([^{;]+?)\s*[{;]\s*/my,
@@ -378,10 +378,10 @@ function tokenize$1(css) {
 	return tokens;
 }
 
-function parse(css) {
+function parse$1(css) {
 	// strip comments (for now)
 	css = css.replace(COMMENTS, '');
-	return tokenize$1(css);
+	return tokenize(css);
 }
 
 function stripEmptyAts(css) {
@@ -481,7 +481,7 @@ function nth(a, b, pos) {
 }
 
 // assumes stripPseudos(sel); has already been called
-function parse$1(sel) {
+function parse(sel) {
 	var RE = {
 		IDENT:	/([\w*-]+)/iy,
 		ATTR:	/([\w-]+)(?:(.?=)["']?([^\]]*?)["']?)?\]/iy,
@@ -529,7 +529,7 @@ function parse$1(sel) {
 				if (m[2] == '(') {
 					var subsel = takeUntilMatchedClosing(sel, RE.PSEUDO.lastIndex, '(', ')');
 					RE.PSEUDO.lastIndex += subsel.length + 1;
-					m[2] = m[1] == 'not' ? parse$1(subsel) : subsel;
+					m[2] = m[1] == 'not' ? parse(subsel) : subsel;
 				}
 
 				toks.splice(
@@ -798,7 +798,7 @@ function some(nodes, m) {
 }
 
 var _export_some_ = function (nodes, sel) {
-	return some(nodes, Array.isArray(sel) ? sel : parse$1(sel));
+	return some(nodes, Array.isArray(sel) ? sel : parse(sel));
 };
 
 function splice(str, index, count, add) {
@@ -931,7 +931,7 @@ function dropCssVars(css, shouldDrop) {
 	return css2;
 }
 
-function postProc$1(out, shouldDrop, log, START) {
+function postProc(out, shouldDrop, log, START) {
 	// flatten & remove custom props to ensure no accidental
 	// collisions for regexes, e.g. --animation-name: --font-face:
 	// this is used for testing for "used" keyframes and fonts and
@@ -971,7 +971,7 @@ function dropcss(opts) {
 	var shouldDrop = opts.shouldDrop || retTrue;
 	var didRetain  = opts.didRetain  || retTrue;
 
-	var tokens = parse(opts.css);
+	var tokens = parse$1(opts.css);
 
 	// cache
 	var tested = {};
@@ -1045,7 +1045,7 @@ function dropcss(opts) {
 
 		if (tok === SELECTORS) {
 			i$1++;
-			var len = tokens[i$1].length;
+			tokens[i$1].length;
 			tokens[i$1] = tokens[i$1].filter(function (s) {
 				if (typeof s == 'string') {
 					if (s in tested)
@@ -1069,7 +1069,7 @@ function dropcss(opts) {
 
 	var out = generate(tokens, didRetain);
 
-	out = postProc$1(out, shouldDrop);
+	out = postProc(out, shouldDrop);
 
 	return {
 		css: stripEmptyAts(out),

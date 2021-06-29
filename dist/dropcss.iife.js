@@ -4,7 +4,7 @@
 *
 * dropcss.js (DropCSS)
 * An exceptionally fast, thorough and tiny unused-CSS cleaner
-* https://github.com/freddy38510/dropcss (v2.0.1)
+* https://github.com/freddy38510/dropcss (v2.0.2)
 */
 
 var dropcss = (function () {

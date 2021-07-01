@@ -5,6 +5,7 @@
   "main": "./dist/dropcss.cjs.js",
   "scripts": {
     "build": "rollup -c",
+    "dev": "rollup -c --watch",
     "test": "nyc mocha test/src/*.js",
     "coverage": "nyc report --reporter=lcov --reporter=text > ./test/coverage.txt"
   },

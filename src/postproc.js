@@ -125,7 +125,7 @@ function dropCssVars(css, shouldDrop) {
 
 	do {
 		css = css2;
-		css2 = css.replace(CUSTOM_PROP_DEF, (m, m1, m2) => css.indexOf('var(' + m2 + ')') != -1 ? m : m1);
+		css2 = css.replace(CUSTOM_PROP_DEF, (m, m1, m2) => css.indexOf('var(' + m2 + ')') === -1 && shouldDrop(m2) === true ? m1 : m);
 	} while (css2 != css);
 
 	return css2;

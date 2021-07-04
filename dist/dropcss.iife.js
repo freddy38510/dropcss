@@ -932,7 +932,7 @@ var dropcss = (function () {
 
 		do {
 			css = css2;
-			css2 = css.replace(CUSTOM_PROP_DEF, function (m, m1, m2) { return css.indexOf('var(' + m2 + ')') != -1 ? m : m1; });
+			css2 = css.replace(CUSTOM_PROP_DEF, function (m, m1, m2) { return css.indexOf('var(' + m2 + ')') === -1 && shouldDrop(m2) === true ? m1 : m; });
 		} while (css2 != css);
 
 		return css2;
@@ -950,7 +950,7 @@ var dropcss = (function () {
 
 		out = dropFontFaces(out, flatCss, shouldDrop);
 
-		out = dropCssVars(out);
+		out = dropCssVars(out, shouldDrop);
 
 		// kill any leftover empty blocks e.g. :root {}
 		return out.replace(/[^{}]+\{\s*\}/gm, '');

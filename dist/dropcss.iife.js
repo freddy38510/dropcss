@@ -87,6 +87,9 @@ var dropcss = (function () {
 		while (pos < html.length) {
 			next();
 
+			if(prevPos > pos)
+				{ parseErr('html', html, prevPos); }
+
 			if (prevPos === pos)
 				{ parseErr('html', html, pos); }
 
@@ -366,6 +369,9 @@ var dropcss = (function () {
 
 		while (pos < css.length) {
 			next();
+
+			if(prevPos > pos)
+				{ parseErr('css', css, prevPos); }
 
 			if (prevPos === pos)
 				{ parseErr('css', css, pos); }

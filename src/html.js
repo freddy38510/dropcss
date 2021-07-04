@@ -75,6 +75,9 @@ function tokenize(html) {
 	while (pos < html.length) {
 		next();
 
+		if(prevPos > pos)
+			parseErr('html', html, prevPos);
+
 		if (prevPos === pos)
 			parseErr('html', html, pos);
 

@@ -163,6 +163,9 @@ function tokenize(css) {
 	while (pos < css.length) {
 		next();
 
+		if(prevPos > pos)
+			parseErr('css', css, prevPos);
+
 		if (prevPos === pos)
 			parseErr('css', css, pos);
 

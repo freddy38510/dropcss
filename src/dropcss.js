@@ -123,8 +123,14 @@ function dropcss(opts) {
 
 					let cleaned = stripNonAssertablePseudos(s);
 
-					if (cleaned == '')
+					if (cleaned == '') {
+						if(s.startsWith(':')) {
+							// call shouldDrop on pseudo selectors/classes at root level if html is blank
+							// usefull to purge with a whitelist
+							return H.nodes.length > 0 || shouldDrop(s) !== true;
+						}
 						return true;
+					}
 
 					if (cleaned in tested)
 						return tested[cleaned];

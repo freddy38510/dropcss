@@ -199,7 +199,7 @@ var _export_parse_ = function (html) {
 
 	var ctx = {
 		nodes: [],
-		tag: new Set(["*"]),
+		tag: html === '' ? new Set() : new Set(["*"]),
 		class: new Set(),
 		attr: new Set(),
 	};
@@ -1059,8 +1059,14 @@ function dropcss(opts) {
 
 					var cleaned = stripNonAssertablePseudos(s);
 
-					if (cleaned == '')
-						{ return true; }
+					if (cleaned == '') {
+						if(s.startsWith(':')) {
+							// call shouldDrop on pseudo selectors/classes at root level if html is blank
+							// usefull to purge with a whitelist
+							return H.nodes.length > 0 || shouldDrop(s) !== true;
+						}
+						return true;
+					}
 
 					if (cleaned in tested)
 						{ return tested[cleaned]; }

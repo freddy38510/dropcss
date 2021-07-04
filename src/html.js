@@ -190,7 +190,7 @@ exports.parse = html => {
 
 	const ctx = {
 		nodes: [],
-		tag: new Set(["*"]),
+		tag: html === '' ? new Set() : new Set(["*"]),
 		class: new Set(),
 		attr: new Set(),
 	};

@@ -24,6 +24,7 @@ export default [
 		input: './src/dropcss.js',
 		output: {
 			name: 'dropcss',
+			exports: 'auto',
 			file: './dist/dropcss.cjs.js',
 			format: 'cjs',
 			banner,

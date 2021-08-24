@@ -34,6 +34,9 @@ function dropcss(opts) {
 
 	LOGGING && log.push([+new Date() - START, 'HTML parsed & processed']);
 
+	const dropUsedFontFace = opts.dropUsedFontFace || false;
+	const dropUsedKeyframes = opts.dropUsedKeyframes || false;
+
 	const shouldDrop = opts.shouldDrop || retTrue;
 	const didRetain  = opts.didRetain  || retTrue;
 
@@ -149,7 +152,7 @@ function dropcss(opts) {
 
 	LOGGING && log.push([+new Date() - START, 'Generate output']);
 
-	out = postProc(out, shouldDrop, log, START);
+	out = postProc(out, dropUsedFontFace, dropUsedKeyframes, shouldDrop, log, START);
 
 	LOGGING && log.forEach(e => console.log(e[0], e[1]));
 

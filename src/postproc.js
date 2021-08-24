@@ -38,7 +38,7 @@ function resolveCustomProps(css) {
 	return css;
 }
 
-function dropKeyFrames(css, flatCss, shouldDrop) {
+function dropKeyFrames(css, flatCss, shouldDrop, dropUsedKeyframes) {
 	// defined
 	let defs = [];
 
@@ -52,17 +52,19 @@ function dropKeyFrames(css, flatCss, shouldDrop) {
 	// used
 	let used = new Set();
 
-	let RE2 = /animation(?:-name)?:([^;!}]+)/gm;
+	if (!dropUsedKeyframes) {
+		let RE2 = /animation(?:-name)?:([^;!}]+)/gm;
 
-	while (m = RE2.exec(flatCss)) {
-		m[1].trim().split(COMMA_SPACED).forEach(a => {
-			let keyFramesName = a.match(/^\S+/)[0];
+		while (m = RE2.exec(flatCss)) {
+			m[1].trim().split(COMMA_SPACED).forEach(a => {
+				let keyFramesName = a.match(/^\S+/)[0];
 
-			if (/^-?[\d.]+m?s/.test(keyFramesName))
-				keyFramesName = a.match(/\S+$/)[0];
+				if (/^-?[\d.]+m?s/.test(keyFramesName))
+					keyFramesName = a.match(/\S+$/)[0];
 
-			used.add(keyFramesName);
-		});
+				used.add(keyFramesName);
+			});
+		}
 	}
 
 	return removeBackwards(css, defs, used, shouldDrop, '@keyframes ');
@@ -72,7 +74,7 @@ function cleanFontFam(fontFam) {
 	return fontFam.trim().replace(/'|"/gm, '').split(COMMA_SPACED);
 }
 
-function dropFontFaces(css, flatCss, shouldDrop) {
+function dropFontFaces(css, flatCss, shouldDrop, dropUsedFontFace) {
 	// defined
 	let gm = 'gm',
 		re00 = '@font-face[^}]+\\}+',
@@ -98,23 +100,25 @@ function dropFontFaces(css, flatCss, shouldDrop) {
 	// used
 	let used = new Set();
 
-	let RE02 = RegExp(re00 + '|' + re01, gm);
+	if (!dropUsedFontFace) {
+		let RE02 = RegExp(re00 + '|' + re01, gm);
 
-	while (m = RE02.exec(flatCss)) {
-		if (m[0][0] !== '@')
-			cleanFontFam(m[1]).forEach(a => used.add(a));
-	}
+		while (m = RE02.exec(flatCss)) {
+			if (m[0][0] !== '@')
+				cleanFontFam(m[1]).forEach(a => used.add(a));
+		}
 
-	let RE03 = /font:([^;!}]+)/gm;
-	let RE04 = /\s*(?:['"][\w- ]+['"]|[\w-]+)\s*(?:,|$)/gm;
-	let t;
+		let RE03 = /font:([^;!}]+)/gm;
+		let RE04 = /\s*(?:['"][\w- ]+['"]|[\w-]+)\s*(?:,|$)/gm;
+		let t;
 
-	while (m = RE03.exec(flatCss)) {
-		t = '';
-		while (m2 = RE04.exec(m[1]))
-			t += m2[0];
+		while (m = RE03.exec(flatCss)) {
+			t = '';
+			while (m2 = RE04.exec(m[1]))
+				t += m2[0];
 
-		cleanFontFam(t).forEach(a => used.add(a));
+			cleanFontFam(t).forEach(a => used.add(a));
+		}
 	}
 
 	return removeBackwards(css, defs, used, shouldDrop, '@font-face ');
@@ -131,7 +135,7 @@ function dropCssVars(css, shouldDrop) {
 	return css2;
 }
 
-function postProc(out, shouldDrop, log, START) {
+function postProc(out, dropUsedFontFace, dropUsedKeyframes, shouldDrop, log, START) {
 	// flatten & remove custom props to ensure no accidental
 	// collisions for regexes, e.g. --animation-name: --font-face:
 	// this is used for testing for "used" keyframes and fonts and
@@ -139,11 +143,11 @@ function postProc(out, shouldDrop, log, START) {
 	// so does not need to be regenerated during iterative purging
 	let flatCss = resolveCustomProps(out).replace(CUSTOM_PROP_DEF, (m, m1) => m1);
 
-	out = dropKeyFrames(out, flatCss, shouldDrop);
+	out = dropKeyFrames(out, flatCss, shouldDrop, dropUsedKeyframes);
 
 	LOGGING && log.push([+new Date() - START, 'Drop unused @keyframes']);
 
-	out = dropFontFaces(out, flatCss, shouldDrop);
+	out = dropFontFaces(out, flatCss, shouldDrop, dropUsedFontFace);
 
 	LOGGING && log.push([+new Date() - START, 'Drop unused @font-face']);
 

@@ -3,6 +3,11 @@
   "version": "2.2.0",
   "description": "An exceptionally fast, thorough and tiny unused-CSS cleaner",
   "main": "./dist/dropcss.cjs.js",
+  "exports": {
+    "require": "./dropcss.cjs.js",
+    "browser": "./dropcss.iife.min.js",
+    "default": "./dropcss.cjs.js"
+  },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c --watch",

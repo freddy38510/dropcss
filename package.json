@@ -4,9 +4,9 @@
   "description": "An exceptionally fast, thorough and tiny unused-CSS cleaner",
   "main": "./dist/dropcss.cjs.js",
   "exports": {
-    "require": "./dropcss.cjs.js",
-    "browser": "./dropcss.iife.min.js",
-    "default": "./dropcss.cjs.js"
+    "require": "./dist/dropcss.cjs.js",
+    "browser": "./dist/dropcss.iife.min.js",
+    "default": "./dist/dropcss.cjs.js"
   },
   "scripts": {
     "build": "rollup -c",

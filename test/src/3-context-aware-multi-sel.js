@@ -1,5 +1,5 @@
-const dropcss = require('../../src/dropcss.js');
-const assert = require('assert');
+import dropcss  from'../../src/dropcss.js';
+import assert from 'assert';
 
 /* e.g.
 
@@ -15,7 +15,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="foo"></span><img></div>',
 				css:	'.foo:first-of-type {a:b;}',
 			});
-			assert.equal(out, '.foo:first-of-type{a:b;}');
+			assert.strictEqual(out, '.foo:first-of-type{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -23,7 +23,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="bar"></span><img><span class="foo"></span><img></div>',
 				css:	'.foo:first-of-type {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -33,7 +33,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="bar"></span><span class="foo"></span><img></div>',
 				css:	'.foo:last-of-type {a:b;}',
 			});
-			assert.equal(out, '.foo:last-of-type{a:b;}');
+			assert.strictEqual(out, '.foo:last-of-type{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -41,7 +41,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="foo"></span><img><span class="bar"></span><img></div>',
 				css:	'.foo:last-of-type {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -51,7 +51,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="foo"></span><img></div>',
 				css:	'.foo:only-of-type {a:b;}',
 			});
-			assert.equal(out, '.foo:only-of-type{a:b;}');
+			assert.strictEqual(out, '.foo:only-of-type{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -59,7 +59,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="foo"></span><img><span class="foo"></span><img></div>',
 				css:	'.foo:only-of-type {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -69,7 +69,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="foo"></span><img></div>',
 				css:	'.foo:only-of-type {a:b;}',
 			});
-			assert.equal(out, '.foo:only-of-type{a:b;}');
+			assert.strictEqual(out, '.foo:only-of-type{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -77,7 +77,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="foo"></span><img><span class="foo"></span><img></div>',
 				css:	'.foo:only-of-type {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -87,7 +87,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="bar"></span><img><span class="foo"></span><img></div>',
 				css:	'.foo:nth-of-type(2) {a:b;}',
 			});
-			assert.equal(out, '.foo:nth-of-type(2){a:b;}');
+			assert.strictEqual(out, '.foo:nth-of-type(2){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -95,7 +95,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="foo"></span><img><span class="bar"></span><img></div>',
 				css:	'.foo:nth-of-type(2) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -105,7 +105,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="bar"></span><img><span class="foo"></span><img></div>',
 				css:	'.foo:nth-last-of-type(1) {a:b;}',
 			});
-			assert.equal(out, '.foo:nth-last-of-type(1){a:b;}');
+			assert.strictEqual(out, '.foo:nth-last-of-type(1){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -113,7 +113,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<div><img><span class="foo"></span><img><span class="bar"></span><img></div>',
 				css:	'.foo:nth-last-of-type(1) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -123,7 +123,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<body><input></body>',
 				css:	"body input:not([type='color']):not([type='checkbox']) {a:b;}",
 			});
-			assert.equal(out, "body input:not([type='color']):not([type='checkbox']){a:b;}");
+			assert.strictEqual(out, "body input:not([type='color']):not([type='checkbox']){a:b;}");
 		});
 
 		it('should drop absent', function() {
@@ -131,7 +131,7 @@ describe('Context-aware, multi selector', () => {
 				html:	'<body><input type="color"></body>',
 				css:	"body input:not([type='color']):not([type='checkbox']) {a:b;}",
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 });

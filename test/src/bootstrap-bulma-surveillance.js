@@ -1,8 +1,7 @@
-const fs = require('fs');
-const dropcss = require('../../src/dropcss.js');
-const assert = require('assert');
-
-const vkbeautify = require('../bench/lib/vkbeautify');
+import fs from 'fs';
+import dropcss  from'../../src/dropcss.js';
+import assert from 'assert';
+import vkbeautify from '../bench/lib/vkbeautify';
 
 describe('Bulma-Bootstrap-Surveillance', () => {
 	let html, css;
@@ -14,7 +13,7 @@ describe('Bulma-Bootstrap-Surveillance', () => {
 				css:	fs.readFileSync(__dirname + '/../bench/stress/input/bootstrap.min.css', 'utf8') + fs.readFileSync(__dirname + '/../bench/stress/input/bulma.min.css', 'utf8'),
 			});
 
-			assert.equal(vkbeautify(out), fs.readFileSync(__dirname + '/../bench/stress/output/dropcss.pretty.css', 'utf8'));
+			assert.strictEqual(vkbeautify(out), fs.readFileSync(__dirname + '/../bench/stress/output/dropcss.pretty.css', 'utf8'));
 		});
 	});
 });

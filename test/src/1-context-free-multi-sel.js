@@ -1,5 +1,5 @@
-const dropcss = require('../../src/dropcss.js');
-const assert = require('assert');
+import dropcss  from'../../src/dropcss.js';
+import assert from 'assert';
 
 describe('Context-free, multi selector', () => {
 	let html, css;
@@ -10,7 +10,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="foo"></div>',
 				css:	'div.foo {a:b;}',
 			});
-			assert.equal(out, 'div.foo{a:b;}');
+			assert.strictEqual(out, 'div.foo{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -18,7 +18,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<i class="foo"></i>',
 				css:	'div.foo {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -28,7 +28,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div id="a"></div>',
 				css:	'div#a {a:b;}',
 			});
-			assert.equal(out, 'div#a{a:b;}');
+			assert.strictEqual(out, 'div#a{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -36,7 +36,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<i id="a"></i>',
 				css:	'div#a {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -46,7 +46,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="a b"></div>',
 				css:	'.b.a {a:b;}',
 			});
-			assert.equal(out, '.b.a{a:b;}');
+			assert.strictEqual(out, '.b.a{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -54,7 +54,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="a z"></div>',
 				css:	'.b.a {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -64,7 +64,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="a" id="foo"></div>',
 				css:	'#foo.a {a:b;}',
 			});
-			assert.equal(out, '#foo.a{a:b;}');
+			assert.strictEqual(out, '#foo.a{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -72,7 +72,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="a"></div>',
 				css:	'#foo.a {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -82,7 +82,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div foo></div>',
 				css:	'div[foo] {a:b;}',
 			});
-			assert.equal(out, 'div[foo]{a:b;}');
+			assert.strictEqual(out, 'div[foo]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -90,7 +90,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div foo></div>',
 				css:	'i[foo] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -101,7 +101,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="z" foo="bar"></div>',
 				css:	'.z[foo=bar] {a:b;}',
 			});
-			assert.equal(out, '.z[foo=bar]{a:b;}');
+			assert.strictEqual(out, '.z[foo=bar]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -109,7 +109,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'.z[foo=bar] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -119,7 +119,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div foo="bar" moo="cow"></div>',
 				css:	'[foo*=a][moo*=w] {a:b;}',
 			});
-			assert.equal(out, '[foo*=a][moo*=w]{a:b;}');
+			assert.strictEqual(out, '[foo*=a][moo*=w]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -127,7 +127,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div foo="bar" moo="cow"></div>',
 				css:	'[foo*=a][baz*=w] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -137,7 +137,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="z" foo="bar"></div>',
 				css:	'.z[foo^=b] {a:b;}',
 			});
-			assert.equal(out, '.z[foo^=b]{a:b;}');
+			assert.strictEqual(out, '.z[foo^=b]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -145,7 +145,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="z" foo="bar"></div>',
 				css:	'[foo^=c] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -155,7 +155,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'div[foo$=r] {a:b;}',
 			});
-			assert.equal(out, 'div[foo$=r]{a:b;}');
+			assert.strictEqual(out, 'div[foo$=r]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -163,7 +163,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'div[foo$=z] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -173,7 +173,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="bar"></div>',
 				css:	'div:not(.foo) {a:b;}',
 			});
-			assert.equal(out, 'div:not(.foo){a:b;}');
+			assert.strictEqual(out, 'div:not(.foo){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -181,7 +181,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div class="foo"></div><i></i>',
 				css:	'div:not(.foo) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 
 		it('should drop absent', function() {
@@ -189,7 +189,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<i></i>',
 				css:	'div:not(.foo) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -199,7 +199,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div><p></p><p></p><p></p><p></p></div>',
 				css:	'p:not(:nth-child(n+3)) {a:b;}',
 			});
-			assert.equal(out, 'p:not(:nth-child(n+3)){a:b;}');
+			assert.strictEqual(out, 'p:not(:nth-child(n+3)){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -207,7 +207,7 @@ describe('Context-free, multi selector', () => {
 				html:	'<div><i></i><i></i><p></p><p></p></div>',
 				css:	'p:not(:nth-child(n+3)) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 

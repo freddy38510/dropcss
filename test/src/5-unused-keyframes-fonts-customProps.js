@@ -1,5 +1,5 @@
-const dropcss = require('../../src/dropcss.js');
-const assert = require('assert');
+import dropcss  from'../../src/dropcss.js';
+import assert from 'assert';
 
 describe('Unused @keyframes and @font-face', () => {
 	let html;
@@ -23,7 +23,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + 'div{color: red;}');
+			assert.strictEqual(out, prepend + 'div{color: red;}');
 		});
 
 		it('should drop pulse, nudge', function() {
@@ -33,7 +33,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + 'div{color: red;}@keyframes bop{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes bop{0%{width:300%;}100%{width: 100%;}}');
+			assert.strictEqual(out, prepend + 'div{color: red;}@keyframes bop{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes bop{0%{width:300%;}100%{width: 100%;}}');
 		});
 
 		it('should drop bop', function() {
@@ -43,7 +43,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + 'div{color: red;}@keyframes pulse{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes pulse{0%{width:300%;}100%{width:100%;}}@keyframes nudge{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes nudge{0%{width:300%;}100%{width:100%;}}');
+			assert.strictEqual(out, prepend + 'div{color: red;}@keyframes pulse{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes pulse{0%{width:300%;}100%{width:100%;}}@keyframes nudge{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes nudge{0%{width:300%;}100%{width:100%;}}');
 		});
 
 		it('should retain nudge', function() {
@@ -53,7 +53,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + 'div{color: red;}@keyframes nudge{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes nudge{0%{width:300%;}100%{width:100%;}}');
+			assert.strictEqual(out, prepend + 'div{color: red;}@keyframes nudge{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes nudge{0%{width:300%;}100%{width:100%;}}');
 		});
 	});
 
@@ -68,7 +68,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + "div{color: red;}@font-face{font-family: 'Open Sans';}");
+			assert.strictEqual(out, prepend + "div{color: red;}@font-face{font-family: 'Open Sans';}");
 		});
 
 		it('should retain if used (shorthand)', function() {
@@ -78,7 +78,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + "div{color: red;}@font-face{font-family: 'Open Sans';}");
+			assert.strictEqual(out, prepend + "div{color: red;}@font-face{font-family: 'Open Sans';}");
 		});
 
 		it('should drop if unused', function() {
@@ -88,7 +88,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + "div{color: red;}");
+			assert.strictEqual(out, prepend + "div{color: red;}");
 		});
 
 		it('should drop if unused (multiple defs)', function() {
@@ -98,7 +98,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, "div{color: red;}");
+			assert.strictEqual(out, "div{color: red;}");
 		});
 	});
 
@@ -113,7 +113,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + "div{color: red;}");
+			assert.strictEqual(out, prepend + "div{color: red;}");
 		});
 
 		it('should retain if used in font-family:', function() {
@@ -123,7 +123,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	prepend + css,
 			});
-			assert.equal(out, prepend + "div{color: red;}:root{--font-family: Foo, 'Bar Baz';}@font-face{font-family: Foo}");
+			assert.strictEqual(out, prepend + "div{color: red;}:root{--font-family: Foo, 'Bar Baz';}@font-face{font-family: Foo}");
 		});
 
 		it('should retain if used (deep resolve)', function() {
@@ -137,7 +137,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	css2,
 			});
-			assert.equal(out, ":root{--font: var(--sty) var(--wgt) 1em/var(--lht) var(--fam1), var(--fam2); --sty: italic; --wgt: bold; --lht: var(--hgt)em; --fam1: 'Open Sans'; --fam2: Arial; --hgt: 1.6;}@font-face{font-family: var(--fam1);}div{font: var(--font);}");
+			assert.strictEqual(out, ":root{--font: var(--sty) var(--wgt) 1em/var(--lht) var(--fam1), var(--fam2); --sty: italic; --wgt: bold; --lht: var(--hgt)em; --fam1: 'Open Sans'; --fam2: Arial; --hgt: 1.6;}@font-face{font-family: var(--fam1);}div{font: var(--font);}");
 		});
 
 		it('should drop if unused (deep resolve)', function() {
@@ -151,7 +151,7 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div></div>',
 				css:	css2,
 			});
-			assert.equal(out, "");
+			assert.strictEqual(out, "");
 		});
 	});
 
@@ -163,7 +163,26 @@ describe('Unused @keyframes and @font-face', () => {
 				html:	'<div class="a--b"></div><div class="--c"></div>',
 				css:	css,
 			});
-			assert.equal(out, css);
+			assert.strictEqual(out, css);
+		});
+		it('should retain if used', function() {
+			let css = ":root{--red: #f00; }div{color: var(--red);}}";
+
+			let {css: out} = dropcss({
+				html:	'<div></div>',
+				css:	css,
+			});
+			assert.strictEqual(out, ":root{--red: #f00;}div{color: var(--red);}");
+		});
+
+		it('should drop if unused', function() {
+			let css = ":root{--red: #f00; }";
+
+			let {css: out} = dropcss({
+				html:	'<div></div>',
+				css:	css,
+			});
+			assert.strictEqual(out, "");
 		});
 	});
 });

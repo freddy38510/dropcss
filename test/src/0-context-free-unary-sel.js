@@ -1,5 +1,5 @@
-const dropcss = require('../../src/dropcss.js');
-const assert = require('assert');
+import dropcss  from'../../src/dropcss.js';
+import assert from 'assert';
 
 describe('Context-free, unary selector', () => {
 	let html, css;
@@ -10,7 +10,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div></div>',
 				css:	'* {a:b;}',
 			});
-			assert.equal(out, '*{a:b;}');
+			assert.strictEqual(out, '*{a:b;}');
 		});
 	});
 
@@ -20,7 +20,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div></div>',
 				css:	'div {a:b;}',
 			});
-			assert.equal(out, 'div{a:b;}');
+			assert.strictEqual(out, 'div{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -28,7 +28,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div></div>',
 				css:	'span {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -38,7 +38,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div id="a"></div>',
 				css:	'#a {a:b;}',
 			});
-			assert.equal(out, '#a{a:b;}');
+			assert.strictEqual(out, '#a{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -46,7 +46,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div id="a"></div>',
 				css:	'#b {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -56,7 +56,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div class="a"></div>',
 				css:	'.a {a:b;}',
 			});
-			assert.equal(out, '.a{a:b;}');
+			assert.strictEqual(out, '.a{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -64,7 +64,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div class="a"></div>',
 				css:	'.b {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -74,7 +74,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo></div>',
 				css:	'[foo] {a:b;}',
 			});
-			assert.equal(out, '[foo]{a:b;}');
+			assert.strictEqual(out, '[foo]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -82,7 +82,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo></div>',
 				css:	'[bar] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -93,7 +93,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo=bar] {a:b;}',
 			});
-			assert.equal(out, '[foo=bar]{a:b;}');
+			assert.strictEqual(out, '[foo=bar]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -101,7 +101,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo=cow] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -111,7 +111,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo*=a] {a:b;}',
 			});
-			assert.equal(out, '[foo*=a]{a:b;}');
+			assert.strictEqual(out, '[foo*=a]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -119,7 +119,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo*=c] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -129,7 +129,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo^=b] {a:b;}',
 			});
-			assert.equal(out, '[foo^=b]{a:b;}');
+			assert.strictEqual(out, '[foo^=b]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -137,7 +137,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo^=c] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -147,7 +147,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo$=r] {a:b;}',
 			});
-			assert.equal(out, '[foo$=r]{a:b;}');
+			assert.strictEqual(out, '[foo$=r]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -155,7 +155,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo$=z] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -165,7 +165,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	'[foo~=bar] {a:b;}',
 			});
-			assert.equal(out, '[foo~=bar]{a:b;}');
+			assert.strictEqual(out, '[foo~=bar]{a:b;}');
 		});
 
 		it('should retain present', function() {
@@ -173,7 +173,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar baz"></div>',
 				css:	'[foo~=bar] {a:b;}',
 			});
-			assert.equal(out, '[foo~=bar]{a:b;}');
+			assert.strictEqual(out, '[foo~=bar]{a:b;}');
 		});
 
 		it('should retain present', function() {
@@ -181,7 +181,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="baz bar"></div>',
 				css:	'[foo~=bar] {a:b;}',
 			});
-			assert.equal(out, '[foo~=bar]{a:b;}');
+			assert.strictEqual(out, '[foo~=bar]{a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -189,7 +189,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar-baz"></div>',
 				css:	'[foo~=bar] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 
 		it('should drop absent', function() {
@@ -197,7 +197,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="baz-bar"></div>',
 				css:	'[foo~=bar] {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -207,7 +207,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div></div>',
 				css:	':not(span) {a:b;}',
 			});
-			assert.equal(out, ':not(span){a:b;}')
+			assert.strictEqual(out, ':not(span){a:b;}')
 		});
 
 		it('should drop absent', function() {
@@ -215,7 +215,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div></div>',
 				css:	':not(div) {a:b;}',
 			});
-			assert.equal(out, '');;
+			assert.strictEqual(out, '');;
 		});
 	});
 
@@ -225,7 +225,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div id="a"></div>',
 				css:	':not(#b) {a:b;}',
 			});
-			assert.equal(out, ':not(#b){a:b;}');
+			assert.strictEqual(out, ':not(#b){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -233,7 +233,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div id="a"></div>',
 				css:	':not(#a) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -243,7 +243,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div class="a"></div>',
 				css:	':not(.b) {a:b;}',
 			});
-			assert.equal(out, ':not(.b){a:b;}');
+			assert.strictEqual(out, ':not(.b){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -251,7 +251,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div class="a"></div>',
 				css:	':not(.a) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -261,7 +261,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo></div>',
 				css:	':not([bar]) {a:b;}',
 			});
-			assert.equal(out, ':not([bar]){a:b;}');
+			assert.strictEqual(out, ':not([bar]){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -269,7 +269,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo></div>',
 				css:	':not([foo]) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -280,7 +280,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	':not([foo=cow]) {a:b;}',
 			});
-			assert.equal(out, ':not([foo=cow]){a:b;}');
+			assert.strictEqual(out, ':not([foo=cow]){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -288,7 +288,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	':not([foo=bar]) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -298,7 +298,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	':not([foo*=c]) {a:b;}',
 			});
-			assert.equal(out, ':not([foo*=c]){a:b;}');
+			assert.strictEqual(out, ':not([foo*=c]){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -306,7 +306,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	':not([foo*=a]) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -316,7 +316,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	':not([foo^=c]) {a:b;}',
 			});
-			assert.equal(out, ':not([foo^=c]){a:b;}');
+			assert.strictEqual(out, ':not([foo^=c]){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -324,7 +324,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	':not([foo^=b]) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 
@@ -334,7 +334,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	':not([foo$=z]) {a:b;}',
 			});
-			assert.equal(out, ':not([foo$=z]){a:b;}');
+			assert.strictEqual(out, ':not([foo$=z]){a:b;}');
 		});
 
 		it('should drop absent', function() {
@@ -342,7 +342,7 @@ describe('Context-free, unary selector', () => {
 				html:	'<div foo="bar"></div>',
 				css:	':not([foo$=r]) {a:b;}',
 			});
-			assert.equal(out, '');
+			assert.strictEqual(out, '');
 		});
 	});
 

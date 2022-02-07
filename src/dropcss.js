@@ -6,7 +6,7 @@ import { LOGGING } from './env';
 
 const ATTRIBUTES = /\[([\w-]+)(?:(.?=)"?([^\]]*?)"?)?\]/i;
 
-const pseudoAssertable = /:(?:first|last|nth|only|not)\b/;
+const pseudoAssertable = /:(?:first|last|nth|only|not|is)\b/;
 
 const pseudoNonAssertableParenth = /:(?:lang)\([^)]*\)/g;
 
@@ -137,7 +137,6 @@ export default function dropcss(opts) {
 
 					if (cleaned in tested)
 						return tested[cleaned];
-
 					return tested[cleaned] = (some(H.nodes, cleaned) || shouldDrop(s) !== true);
 				}
 

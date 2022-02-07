@@ -102,6 +102,11 @@ function find(m, ctx) {
 					case 'is':
 						res = find(val, {node: ctx.node, idx: val.length - 1});
 						break;
+					case 'has':
+						res = ctx.node.childNodes.some(
+							(node) => find(val, { node, idx: val.length - 1})
+						);
+						break;
 					case 'first-child':
 						res = tidx == 0;
 						break;

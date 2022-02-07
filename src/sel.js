@@ -1,7 +1,7 @@
 import { takeUntilMatchedClosing } from './css';
 import { parseErr } from './err';
 
-const pseudoClasses = /not|is/
+const pseudoClasses = /not|is|has/
 
 // assumes stripPseudos(sel); has already been called
 export function parse(sel) {

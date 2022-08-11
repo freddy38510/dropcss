@@ -1,6 +1,6 @@
 {
   "name": "@freddy38510/dropcss",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "description": "An exceptionally fast, thorough and tiny unused-CSS cleaner",
   "main": "./dist/dropcss.cjs.js",
   "exports": {

@@ -13,7 +13,7 @@ const RE = {
 	ATTR: /\s*([\w-:]+)(?:="([^"]*)"|='([^']*)'|=([\w-/]+))?\s*/myi,
 	TAIL: /\s*(\/?>)\s*/myi,
 	TEXT: /\s*[^<]*/my,
-	CLOSE: /\s*<\/[\w-]+>\s*/myi,
+	CLOSE: /\s*<\/[\w-]+\s*>\s*/myi,
 };
 
 function tokenize(html) {

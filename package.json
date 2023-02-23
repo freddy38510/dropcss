@@ -2,12 +2,17 @@
   "name": "@freddy38510/dropcss",
   "version": "2.4.0",
   "description": "An exceptionally fast, thorough and tiny unused-CSS cleaner",
-  "main": "./dist/dropcss.cjs.js",
+  "main": "./dist/dropcss.cjs",
+  "module": "./dist/dropcss.mjs",
+  "types": "./types/dropcss.d.ts",
   "exports": {
-    "require": "./dist/dropcss.cjs.js",
+    "types": "./dist/beastcss.d.ts",
+    "module": "./dist/dropcss.mjs",
+    "require": "./dist/dropcss.cjs",
     "browser": "./dist/dropcss.iife.min.js",
-    "default": "./dist/dropcss.cjs.js"
+    "default": "./dist/dropcss.cjs"
   },
+  "type": "module",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c --watch",
@@ -17,10 +22,8 @@
   "author": "Leon Sorokin <leeoniya@gmail.com>",
   "license": "MIT",
   "files": [
-    "package.json",
-    "README.md",
-    "LICENSE",
-    "dist"
+    "dist",
+    "types/dropcss.d.ts"
   ],
   "homepage": "https://github.com/leeoniya/dropcss",
   "repository": {

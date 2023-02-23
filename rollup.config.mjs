@@ -19,51 +19,61 @@ const banner = [
   '',
 ].join('\n');
 
-export default {
-  input: './src/dropcss.js',
-  output: [
-    {
-      name: 'dropcss',
-      exports: 'auto',
-      file: './dist/dropcss.cjs.js',
-      format: 'cjs',
-      banner,
-    },
-    {
-      name: 'dropcss',
-      file: './dist/dropcss.iife.js',
-      format: 'iife',
-      banner,
-    },
-    {
-      name: 'dropcss',
-      file: './dist/dropcss.iife.min.js',
-      format: 'iife',
-      banner: `/*! ${urlVer} */`,
-      plugins: [
-        terser({
-          compress: {
-            inline: 0,
-            passes: 2,
-            keep_fargs: false,
-            pure_getters: true,
-            unsafe: true,
-            unsafe_comps: true,
-            unsafe_math: true,
-            unsafe_undefined: true,
-          },
-          output: {
-            comments: /^!/,
-          },
-        }),
-      ],
-    },
-  ],
-  plugins: [
-    resolve(),
-    commonjs(),
-    buble({
-      transforms: { stickyRegExp: false },
-    }),
-  ],
-};
+export default [
+  {
+    input: './src/dropcss.js',
+    output: [
+      {
+        name: 'dropcss',
+        exports: 'auto',
+        file: './dist/dropcss.mjs',
+        format: 'esm',
+        banner,
+      },
+      {
+        name: 'dropcss',
+        exports: 'auto',
+        file: './dist/dropcss.cjs',
+        format: 'cjs',
+        banner,
+      },
+    ],
+    plugins: [resolve(), commonjs()],
+  },
+  // iife transpiled to ES5
+  {
+    input: './src/dropcss.js',
+    output: [
+      {
+        name: 'dropcss',
+        file: './dist/dropcss.iife.min.js',
+        format: 'iife',
+        banner: `/*! ${urlVer} */`,
+        plugins: [
+          terser({
+            compress: {
+              inline: 0,
+              passes: 2,
+              keep_fargs: false,
+              pure_getters: true,
+              unsafe: true,
+              unsafe_comps: true,
+              unsafe_math: true,
+              unsafe_undefined: true,
+            },
+            output: {
+              comments: /^!/,
+            },
+          }),
+        ],
+      },
+    ],
+    plugins: [
+      resolve(),
+      commonjs(),
+      buble({
+        transforms: { stickyRegExp: false },
+      }),
+    ],
+  },
+];

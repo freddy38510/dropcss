@@ -1,0 +1,5 @@
+dist/
+LICENSE
+yarn.lock
+test/bench/stress/input/
+test/bench/stress/output/

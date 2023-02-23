@@ -15,7 +15,7 @@ module.exports = defineConfig({
     'mocha/prefer-arrow-callback': 2,
     'import/no-extraneous-dependencies': [
       'error',
-      { devDependencies: ['.eslintrc.js', './*', 'test/**'] }, // eslint config file, files at root and test folder
+      { devDependencies: ['.eslintrc.cjs', './*', 'test/**'] }, // eslint config file, files at root and test folder
     ],
   },
   overrides: [

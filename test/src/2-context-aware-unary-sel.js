@@ -186,4 +186,149 @@ describe('Context-aware, unary selector', function () {
       assert.strictEqual(css, '');
     });
   });
+
+  describe(':has(<tag>)', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div><span></span></div>',
+        css: ':has(span) {a:b;}',
+      });
+      assert.equal(out, ':has(span){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: ':has(span) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':has(#id)', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div><div id="a"></div></div>',
+        css: ':has(#a) {a:b;}',
+      });
+      assert.equal(out, ':has(#a){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div><div id="b"></div></div>',
+        css: ':has(#a) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':has(.class)', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div><div class="a"></div></div>',
+        css: ':has(.a) {a:b;}',
+      });
+      assert.equal(out, ':has(.a){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div><div class="b"></div></div>',
+        css: ':has(.a) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':has([attr])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo></div></div>',
+        css: ':has([foo]) {a:b;}',
+      });
+      assert.equal(out, ':has([foo]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div><div bar></div></div>',
+        css: ':has([foo]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  // todo: test [foo="val"], [foo='val']
+  describe(':has([attr=value])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo="bar"></div></div>',
+        css: ':has([foo=bar]) {a:b;}',
+      });
+      assert.equal(out, ':has([foo=bar]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo="cow"></div></div>',
+        css: ':has([foo=bar]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':has([attr*=value])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo="bar"></div></div>',
+        css: ':has([foo*=a]) {a:b;}',
+      });
+      assert.equal(out, ':has([foo*=a]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo="bar"></div></div>',
+        css: ':has([foo*=c]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':has([attr^=value])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo="bar"></div></div>',
+        css: ':has([foo^=b]) {a:b;}',
+      });
+      assert.equal(out, ':has([foo^=b]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo="bar"></div></div>',
+        css: ':has([foo^=c]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':has([attr$=value])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo="bar"></div></div>',
+        css: ':has([foo$=r]) {a:b;}',
+      });
+      assert.equal(out, ':has([foo$=r]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div><div foo="bar"></div></div>',
+        css: ':has([foo$=z]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
 });

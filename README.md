@@ -3,6 +3,7 @@
 An [exceptionally fast](#performance), thorough and tiny ([~10 KB min](https://github.com/leeoniya/dropcss/tree/master/dist/dropcss.iife.min.js)) unused-CSS cleaner _(MIT Licensed)_
 
 ---
+
 ### Introduction
 
 DropCSS takes your HTML and CSS as input and returns only the used CSS as output. Its custom HTML and CSS parsers are highly optimized for the 99% use case and thus avoid the overhead of handling malformed markup or stylesheets, so well-formed input is required. There is minimal handling for complex escaping rules, so there will always exist cases of valid input that cannot be processed by DropCSS; for these infrequent cases, please [start a discussion](https://github.com/leeoniya/dropcss/issues). While the HTML spec allows `html`, `head`, `body` and `tbody` to be implied/omitted, DropCSS makes no such assumptions; selectors will only be retained for tags that can be parsed from provided markup.
@@ -12,9 +13,11 @@ It's also a good idea to run your CSS through a structural optimizer like [clean
 More on this project's backstory & discussions: v0.1.0 alpha: [/r/javascript](https://old.reddit.com/r/javascript/comments/b3mcu8/dropcss_010_a_minimal_and_thorough_unused_css/), [Hacker News](https://news.ycombinator.com/item?id=19469080) and v1.0.0 release: [/r/javascript](https://old.reddit.com/r/javascript/comments/bb7im2/dropcss_v100_an_exceptionally_fast_thorough_and/).
 
 ---
+
 <h3 align="center">Live Demo: <a href="https://codepen.io/leeoniya/pen/LvbRyq">https://codepen.io/leeoniya/pen/LvbRyq</a></h3>
 
 ---
+
 ### Installation
 
 ```
@@ -22,6 +25,7 @@ npm install -D dropcss
 ```
 
 ---
+
 ### Usage & API
 
 ```js
@@ -51,16 +55,15 @@ const whitelist = /#foo|\.bar/;
 let dropped = new Set();
 
 let cleaned = dropcss({
-    html,
-    css,
-    shouldDrop: (sel) => {
-        if (whitelist.test(sel))
-            return false;
-        else {
-            dropped.add(sel);
-            return true;
-        }
-    },
+  html,
+  css,
+  shouldDrop: (sel) => {
+    if (whitelist.test(sel)) return false;
+    else {
+      dropped.add(sel);
+      return true;
+    }
+  },
 });
 
 console.log(cleaned.css);
@@ -71,13 +74,14 @@ console.log(dropped);
 The `shouldDrop` hook is called for every CSS selector that could not be matched in the `html`. Return `false` to retain the selector or `true` to drop it.
 
 ---
+
 ### Features
 
 - Supported selectors
 
-  | Common                                                                                                                                            | Attribute                                                                                    | Positional                                                                                | Positional (of-type)                                                                                | Other    |
-  |---------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|----------|
-  | `*` - universal<br>`<tag>` - tag<br>`#` - id<br>`.` - class<br><code>&nbsp;</code> - descendant<br>`>` - child<br>`+` - adjacent sibling<br>`~` - general sibling | `[attr]`<br>`[attr=val]`<br>`[attr*=val]`<br>`[attr^=val]`<br>`[attr$=val]`<br>`[attr~=val]` | `:first-child`<br>`:last-child`<br>`:only-child`<br>`:nth-child()`<br>`:nth-last-child()` | `:first-of-type`<br>`:last-of-type`<br>`:only-of-type`<br>`:nth-of-type()`<br>`:nth-last-of-type()` | `:not()`<br>`:is()`<br>`:has()` |
+  | Common                                                                                                                                                            | Attribute                                                                                    | Positional                                                                                | Positional (of-type)                                                                                | Other                                          |
+  | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+  | `*` - universal<br>`<tag>` - tag<br>`#` - id<br>`.` - class<br><code>&nbsp;</code> - descendant<br>`>` - child<br>`+` - adjacent sibling<br>`~` - general sibling | `[attr]`<br>`[attr=val]`<br>`[attr*=val]`<br>`[attr^=val]`<br>`[attr$=val]`<br>`[attr~=val]` | `:first-child`<br>`:last-child`<br>`:only-child`<br>`:nth-child()`<br>`:nth-last-child()` | `:first-of-type`<br>`:last-of-type`<br>`:only-of-type`<br>`:nth-of-type()`<br>`:nth-last-of-type()` | `:not()`<br>`:is()`<br>`:has()` <br>`:where()` |
 
 - Retention of all transient pseudo-class and pseudo-element selectors which cannot be deterministically checked from the parsed HTML.
 - Removal of unused `@font-face` and `@keyframes` blocks.
@@ -88,16 +92,18 @@ The `shouldDrop` hook is called for every CSS selector that could not be matched
   :root {
     --font-style: italic;
     --font-weight: bold;
-    --line-height: var(--height)em;
+    --line-height: var(--height) em;
     --font-family: 'Open Sans';
-    --font: var(--font-style) var(--font-weight) 1em/var(--line-height) var(--font-family);
+    --font: var(--font-style) var(--font-weight) 1em / var(--line-height) var(
+        --font-family
+      );
     --height: 1.6;
   }
 
   @font-face {
     font-family: var(--font-family);
-    src: url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2"),
-         url("/fonts/OpenSans-Regular-webfont.woff") format("woff");
+    src: url('/fonts/OpenSans-Regular-webfont.woff2') format('woff2'), url('/fonts/OpenSans-Regular-webfont.woff')
+        format('woff');
   }
 
   body {
@@ -106,6 +112,7 @@ The `shouldDrop` hook is called for every CSS selector that could not be matched
   ```
 
 ---
+
 ### Performance
 
 #### Input
@@ -190,6 +197,7 @@ The `shouldDrop` hook is called for every CSS selector that could not be matched
 A full **[Stress Test](https://github.com/leeoniya/dropcss/tree/master/test/bench)** is also available.
 
 ---
+
 ### JavaScript Execution
 
 DropCSS does not load external resources or execute `<script>` tags, so your HTML must be fully formed (or SSR'd). Alternatively, you can use [Puppeteer](https://github.com/GoogleChrome/puppeteer) and a local http server to get full `<script>` execution.
@@ -202,39 +210,46 @@ const puppeteer = require('puppeteer');
 const fetch = require('node-fetch');
 const dropcss = require('dropcss');
 
-const server = httpServer.createServer({root: './www'});
+const server = httpServer.createServer({ root: './www' });
 server.listen(8080);
 
 (async () => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto('http://127.0.0.1:8080/index.html');
-    const html = await page.content();
-    const styleHrefs = await page.$$eval('link[rel=stylesheet]', els => Array.from(els).map(s => s.href));
-    await browser.close();
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto('http://127.0.0.1:8080/index.html');
+  const html = await page.content();
+  const styleHrefs = await page.$$eval('link[rel=stylesheet]', (els) =>
+    Array.from(els).map((s) => s.href)
+  );
+  await browser.close();
 
-    await Promise.all(styleHrefs.map(href =>
-        fetch(href).then(r => r.text()).then(css => {
-            let start = +new Date();
+  await Promise.all(
+    styleHrefs.map((href) =>
+      fetch(href)
+        .then((r) => r.text())
+        .then((css) => {
+          let start = +new Date();
 
-            let clean = dropcss({
-                css,
-                html,
-            });
+          let clean = dropcss({
+            css,
+            html,
+          });
 
-            console.log({
-                stylesheet: href,
-                cleanCss: clean.css,
-                elapsed: +new Date() - start,
-            });
+          console.log({
+            stylesheet: href,
+            cleanCss: clean.css,
+            elapsed: +new Date() - start,
+          });
         })
-    ));
+    )
+  );
 
-    server.close();
+  server.close();
 })();
 ```
 
 ---
+
 ### Accumulating a Whitelist
 
 Perhaps you want to take one giant CSS file and purge it against multiple HTML sources, thus retaining any selectors that appear in any HTML source. This also applies when using Puppeteer to invoke different application states to ensure that DropCSS takes every state into account before cleaning the CSS. The idea is rather simple:
@@ -287,32 +302,33 @@ let htmlB = `
 let whitelist = new Set();
 
 function didRetain(sel) {
-    whitelist.add(sel);
+  whitelist.add(sel);
 }
 
 let resA = dropcss({
-    css,
-    html: htmlA,
-    didRetain,
+  css,
+  html: htmlA,
+  didRetain,
 });
 
 let resB = dropcss({
-    css,
-    html: htmlB,
-    didRetain,
+  css,
+  html: htmlB,
+  didRetain,
 });
 
 // final purge relying only on accumulated whitelist
 let cleaned = dropcss({
-    html: '',
-    css,
-    shouldDrop: sel => !whitelist.has(sel),
+  html: '',
+  css,
+  shouldDrop: (sel) => !whitelist.has(sel),
 });
 
 console.log(cleaned.css);
 ```
 
 ---
+
 ### Special / Escaped Sequences
 
 DropCSS is stupid and will choke on unusual selectors, like the ones used by the popular [Tailwind CSS](https://github.com/tailwindcss/tailwindcss) framework:
@@ -320,16 +336,26 @@ DropCSS is stupid and will choke on unusual selectors, like the ones used by the
 `class` attributes can look like this:
 
 ```html
-<div class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-(screen-16)"></div>
-<div class="px-2 -mx-2 py-1 transition-fast relative block hover:translate-r-2px hover:text-gray-900 text-gray-600 font-medium"></div>
+<div
+  class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-(screen-16)"
+></div>
+<div
+  class="px-2 -mx-2 py-1 transition-fast relative block hover:translate-r-2px hover:text-gray-900 text-gray-600 font-medium"
+></div>
 ```
 
 ...and the CSS looks like this:
 
 ```css
-.sticky\?lg\:h-\(screen-16\){...}
-.lg\:text-sm{...}
-.lg\:focus\:text-green-700:focus{...}
+.sticky\?lg\:h-\(screen-16\) {
+  ...;
+}
+.lg\:text-sm {
+  ...;
+}
+.lg\:focus\:text-green-700:focus {
+  ...;
+}
 ```
 
 Ouch.
@@ -339,14 +365,14 @@ The solution is to temporarily replace the escaped characters in the HTML and CS
 ```js
 // remap
 let css2 = css
-    .replace(/\\\:/gm, '__0')
-    .replace(/\\\//gm, '__1')
-    .replace(/\\\?/gm, '__2')
-    .replace(/\\\(/gm, '__3')
-    .replace(/\\\)/gm, '__4');
+  .replace(/\\\:/gm, '__0')
+  .replace(/\\\//gm, '__1')
+  .replace(/\\\?/gm, '__2')
+  .replace(/\\\(/gm, '__3')
+  .replace(/\\\)/gm, '__4');
 
-let html2 = html.replace(/class=["'][^"']*["']/gm, m =>
-    m
+let html2 = html.replace(/class=["'][^"']*["']/gm, (m) =>
+  m
     .replace(/\:/gm, '__0')
     .replace(/\//gm, '__1')
     .replace(/\?/gm, '__2')
@@ -355,28 +381,30 @@ let html2 = html.replace(/class=["'][^"']*["']/gm, m =>
 );
 
 let res = dropcss({
-    css: css2,
-    html: html2,
+  css: css2,
+  html: html2,
 });
 
 // undo
 res.css = res.css
-    .replace(/__0/gm, '\\:')
-    .replace(/__1/gm, '\\/')
-    .replace(/__2/gm, '\\?')
-    .replace(/__3/gm, '\\(')
-    .replace(/__4/gm, '\\)');
+  .replace(/__0/gm, '\\:')
+  .replace(/__1/gm, '\\/')
+  .replace(/__2/gm, '\\?')
+  .replace(/__3/gm, '\\(')
+  .replace(/__4/gm, '\\)');
 ```
 
 This performant work-around allows DropCSS to process Tailwind without issues \o/ and is easily adaptable to support other "interesting" cases. One thing to keep in mind is that `shouldDrop()` will be called with selectors containing the temp replacements rather than original selectors, so make sure to account for this if `shouldDrop()` is used to test against some whitelist.
 
 ---
+
 ### Caveats
 
 - Not tested against or designd to handle malformed HTML or CSS
 - Excessive escaping or reserved characters in your HTML or CSS can break DropCSS's parsers
 
 ---
+
 ### Acknowledgements
 
 - Felix Böhm's [nth-check](https://github.com/fb55/nth-check) - it's not much code, but getting `An+B` expression testing exactly right is frustrating. I got part-way there before discovering this tiny solution.

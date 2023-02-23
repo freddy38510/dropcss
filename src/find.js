@@ -116,6 +116,7 @@ function find(m, ctx) {
             res = !find(val, { node: ctx.node, idx: val.length - 1 });
             break;
           case 'is':
+          case 'where':
             res = find(val, { node: ctx.node, idx: val.length - 1 });
             break;
           case 'has':

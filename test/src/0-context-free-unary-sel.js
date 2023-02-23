@@ -478,5 +478,150 @@ describe('Context-free, unary selector', function () {
     });
   });
 
+  describe(':where(<tag>)', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: ':where(div) {a:b;}',
+      });
+      assert.equal(out, ':where(div){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: ':where(span) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':where(#id)', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div id="a"></div>',
+        css: ':where(#a) {a:b;}',
+      });
+      assert.equal(out, ':where(#a){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div id="a"></div>',
+        css: ':where(#b) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':where(.class)', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div class="a"></div>',
+        css: ':where(.a) {a:b;}',
+      });
+      assert.equal(out, ':where(.a){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div class="a"></div>',
+        css: ':where(.b) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':where([attr])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div foo></div>',
+        css: ':where([foo]) {a:b;}',
+      });
+      assert.equal(out, ':where([foo]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div foo></div>',
+        css: ':where([bar]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  // todo: test [foo="val"], [foo='val']
+  describe(':where([attr=value])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div foo="bar"></div>',
+        css: ':where([foo=bar]) {a:b;}',
+      });
+      assert.equal(out, ':where([foo=bar]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div foo="bar"></div>',
+        css: ':where([foo=cow]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':where([attr*=value])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div foo="bar"></div>',
+        css: ':where([foo*=a]) {a:b;}',
+      });
+      assert.equal(out, ':where([foo*=a]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div foo="bar"></div>',
+        css: ':where([foo*=c]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':where([attr^=value])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div foo="bar"></div>',
+        css: ':where([foo^=b]) {a:b;}',
+      });
+      assert.equal(out, ':where([foo^=b]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div foo="bar"></div>',
+        css: ':where([foo^=c]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
+  describe(':where([attr$=value])', function () {
+    it('should retain present', function () {
+      const { css: out } = dropcss({
+        html: '<div foo="bar"></div>',
+        css: ':where([foo$=r]) {a:b;}',
+      });
+      assert.equal(out, ':where([foo$=r]){a:b;}');
+    });
+
+    it('should drop absent', function () {
+      const { css: out } = dropcss({
+        html: '<div foo="bar"></div>',
+        css: ':where([foo$=z]) {a:b;}',
+      });
+      assert.equal(out, '');
+    });
+  });
+
   // *-child assertions dont make to test in a unary selector since all root elements will be first/last/only "children"
 });

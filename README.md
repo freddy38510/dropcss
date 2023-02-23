@@ -21,7 +21,7 @@ More on this project's backstory & discussions: v0.1.0 alpha: [/r/javascript](ht
 ### Installation
 
 ```
-npm install -D dropcss
+npm install -D @freddy38510/dropcss
 ```
 
 ---
@@ -29,7 +29,7 @@ npm install -D dropcss
 ### Usage & API
 
 ```js
-const dropcss = require('dropcss');
+const dropcss = require('@freddy38510/dropcss');
 
 let html = `
     <html>
@@ -208,7 +208,7 @@ DropCSS does not load external resources or execute `<script>` tags, so your HTM
 const httpServer = require('http-server');
 const puppeteer = require('puppeteer');
 const fetch = require('node-fetch');
-const dropcss = require('dropcss');
+const dropcss = require('@freddy38510/dropcss');
 
 const server = httpServer.createServer({ root: './www' });
 server.listen(8080);
@@ -261,7 +261,7 @@ Perhaps you want to take one giant CSS file and purge it against multiple HTML s
 See [/demos/accumulate.js](/demos/accumulate.js):
 
 ```js
-const dropcss = require('dropcss');
+const dropcss = require('@freddy38510/dropcss');
 
 // super mega-huge combined stylesheet
 let css = `

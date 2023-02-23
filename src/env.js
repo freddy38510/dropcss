@@ -1,1 +1,3 @@
-export const LOGGING = false;
+const LOGGING = false;
+
+export default LOGGING;

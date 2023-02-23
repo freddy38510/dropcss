@@ -1,11 +1,10 @@
-import dropcss  from'../../src/dropcss.js';
+/* eslint-disable func-names */
 import assert from 'assert';
+import dropcss from '../../src/dropcss';
 
-describe('Unused @keyframes and @font-face', () => {
-	let html;
-
-	describe('@keyframes', () => {
-		let css = `
+describe('Unused @keyframes and @font-face', function () {
+  describe('@keyframes', function () {
+    const css = `
 			div{color: red;}
 			@keyframes pulse{0%{width:300%;}100%{width:100%;}}
 			@-webkit-keyframes pulse{0%{width:300%;}100%{width:100%;}}
@@ -16,173 +15,198 @@ describe('Unused @keyframes and @font-face', () => {
 			span{color: black;}
 		`;
 
-		it('should drop all', function() {
-			let prepend = '';
+    it('should drop all', function () {
+      const prepend = '';
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + 'div{color: red;}');
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(out, `${prepend}div{color: red;}`);
+    });
 
-		it('should drop pulse, nudge', function() {
-			let prepend = 'div{animation-name: bop;}';
+    it('should drop pulse, nudge', function () {
+      const prepend = 'div{animation-name: bop;}';
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + 'div{color: red;}@keyframes bop{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes bop{0%{width:300%;}100%{width: 100%;}}');
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(
+        out,
+        `${prepend}div{color: red;}@keyframes bop{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes bop{0%{width:300%;}100%{width: 100%;}}`
+      );
+    });
 
-		it('should drop bop', function() {
-			let prepend = 'div{animation: pulse 3s ease infinite alternate, nudge 5s linear infinite alternate;}';
+    it('should drop bop', function () {
+      const prepend =
+        'div{animation: pulse 3s ease infinite alternate, nudge 5s linear infinite alternate;}';
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + 'div{color: red;}@keyframes pulse{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes pulse{0%{width:300%;}100%{width:100%;}}@keyframes nudge{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes nudge{0%{width:300%;}100%{width:100%;}}');
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(
+        out,
+        `${prepend}div{color: red;}@keyframes pulse{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes pulse{0%{width:300%;}100%{width:100%;}}@keyframes nudge{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes nudge{0%{width:300%;}100%{width:100%;}}`
+      );
+    });
 
-		it('should retain nudge', function() {
-			let prepend = 'div{animation: foo 3s ease infinite alternate, nudge 5s linear infinite alternate;}';
+    it('should retain nudge', function () {
+      const prepend =
+        'div{animation: foo 3s ease infinite alternate, nudge 5s linear infinite alternate;}';
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + 'div{color: red;}@keyframes nudge{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes nudge{0%{width:300%;}100%{width:100%;}}');
-		});
-	});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(
+        out,
+        `${prepend}div{color: red;}@keyframes nudge{0%{width:300%;}100%{width:100%;}}@-webkit-keyframes nudge{0%{width:300%;}100%{width:100%;}}`
+      );
+    });
+  });
 
-	describe('@font-face', () => {
-		let css = "div{color: red;}@font-face{font-family: 'Open Sans';}span{color: black;}";
-		let fontUse = "";
+  describe('@font-face', function () {
+    const css =
+      "div{color: red;}@font-face{font-family: 'Open Sans';}span{color: black;}";
 
-		it('should retain if used', function() {
-			let prepend = "div{font-family: 'Open Sans', Fallback, sans-serif;}";
+    it('should retain if used', function () {
+      const prepend = "div{font-family: 'Open Sans', Fallback, sans-serif;}";
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + "div{color: red;}@font-face{font-family: 'Open Sans';}");
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(
+        out,
+        `${prepend}div{color: red;}@font-face{font-family: 'Open Sans';}`
+      );
+    });
 
-		it('should retain if used (shorthand)', function() {
-			let prepend = "div{font: italic small-caps normal 13px Arial, 'Open Sans', Helvetica, sans-serif;}";
+    it('should retain if used (shorthand)', function () {
+      const prepend =
+        "div{font: italic small-caps normal 13px Arial, 'Open Sans', Helvetica, sans-serif;}";
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + "div{color: red;}@font-face{font-family: 'Open Sans';}");
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(
+        out,
+        `${prepend}div{color: red;}@font-face{font-family: 'Open Sans';}`
+      );
+    });
 
-		it('should drop if unused', function() {
-			let prepend = "";
+    it('should drop if unused', function () {
+      const prepend = '';
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + "div{color: red;}");
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(out, `${prepend}div{color: red;}`);
+    });
 
-		it('should drop if unused (multiple defs)', function() {
-			let prepend = "@font-face{font-family:MuseoSans;}@font-face{font-family:MuseoSans;}";
+    it('should drop if unused (multiple defs)', function () {
+      const prepend =
+        '@font-face{font-family:MuseoSans;}@font-face{font-family:MuseoSans;}';
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, "div{color: red;}");
-		});
-	});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(out, 'div{color: red;}');
+    });
+  });
 
-	describe('@font-face (custom props)', () => {
-		let css = "div{color: red;}:root {--font-family: Foo, 'Bar Baz';}@font-face {font-family: Foo}";
-		let fontUse = "";
+  describe('@font-face (custom props)', function () {
+    const css =
+      "div{color: red;}:root {--font-family: Foo, 'Bar Baz';}@font-face {font-family: Foo}";
 
-		it('should drop if unused (--font-family: should not be confused with font use)', function() {
-			let prepend = "";
+    it('should drop if unused (--font-family: should not be confused with font use)', function () {
+      const prepend = '';
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + "div{color: red;}");
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(out, `${prepend}div{color: red;}`);
+    });
 
-		it('should retain if used in font-family:', function() {
-			let prepend = "div{font-family: var(--font-family);}";
+    it('should retain if used in font-family:', function () {
+      const prepend = 'div{font-family: var(--font-family);}';
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	prepend + css,
-			});
-			assert.strictEqual(out, prepend + "div{color: red;}:root{--font-family: Foo, 'Bar Baz';}@font-face{font-family: Foo}");
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: prepend + css,
+      });
+      assert.strictEqual(
+        out,
+        `${prepend}div{color: red;}:root{--font-family: Foo, 'Bar Baz';}@font-face{font-family: Foo}`
+      );
+    });
 
-		it('should retain if used (deep resolve)', function() {
-			let css2 = [
-				":root {--font: var(--sty) var(--wgt) 1em/var(--lht) var(--fam1), var(--fam2); --sty: italic; --wgt: bold; --lht: var(--hgt)em; --fam1: 'Open Sans'; --fam2: Arial; --hgt: 1.6;}",
-				"@font-face {font-family: var(--fam1);}",
-				"div {font: var(--font);}",
-			].join("");
+    it('should retain if used (deep resolve)', function () {
+      const css2 = [
+        ":root {--font: var(--sty) var(--wgt) 1em/var(--lht) var(--fam1), var(--fam2); --sty: italic; --wgt: bold; --lht: var(--hgt)em; --fam1: 'Open Sans'; --fam2: Arial; --hgt: 1.6;}",
+        '@font-face {font-family: var(--fam1);}',
+        'div {font: var(--font);}',
+      ].join('');
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	css2,
-			});
-			assert.strictEqual(out, ":root{--font: var(--sty) var(--wgt) 1em/var(--lht) var(--fam1), var(--fam2); --sty: italic; --wgt: bold; --lht: var(--hgt)em; --fam1: 'Open Sans'; --fam2: Arial; --hgt: 1.6;}@font-face{font-family: var(--fam1);}div{font: var(--font);}");
-		});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: css2,
+      });
+      assert.strictEqual(
+        out,
+        ":root{--font: var(--sty) var(--wgt) 1em/var(--lht) var(--fam1), var(--fam2); --sty: italic; --wgt: bold; --lht: var(--hgt)em; --fam1: 'Open Sans'; --fam2: Arial; --hgt: 1.6;}@font-face{font-family: var(--fam1);}div{font: var(--font);}"
+      );
+    });
 
-		it('should drop if unused (deep resolve)', function() {
-			let css2 = [
-				":root {--font: var(--sty) var(--wgt) 1em/var(--lht) var(--fam1), var(--fam2); --sty: italic; --wgt: bold; --lht: var(--hgt)em; --fam1: 'Open Sans'; --fam2: Arial; --hgt: 1.6;}",
-				"@font-face {font-family: var(--fam1);}",
-			//	"div {font: var(--font);}",
-			].join("");
+    it('should drop if unused (deep resolve)', function () {
+      const css2 = [
+        ":root {--font: var(--sty) var(--wgt) 1em/var(--lht) var(--fam1), var(--fam2); --sty: italic; --wgt: bold; --lht: var(--hgt)em; --fam1: 'Open Sans'; --fam2: Arial; --hgt: 1.6;}",
+        '@font-face {font-family: var(--fam1);}',
+        //	"div {font: var(--font);}",
+      ].join('');
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	css2,
-			});
-			assert.strictEqual(out, "");
-		});
-	});
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: css2,
+      });
+      assert.strictEqual(out, '');
+    });
+  });
 
-	describe('custom props', () => {
-		it('should not confuse BEM -- classes with custom props', function() {
-			let css = ":root{--red: #f00;}.a--b:hover{color: var(--red);}.--c{width: 10px;}";
+  describe('custom props', function () {
+    it('should not confuse BEM -- classes with custom props', function () {
+      const css =
+        ':root{--red: #f00;}.a--b:hover{color: var(--red);}.--c{width: 10px;}';
 
-			let {css: out} = dropcss({
-				html:	'<div class="a--b"></div><div class="--c"></div>',
-				css:	css,
-			});
-			assert.strictEqual(out, css);
-		});
-		it('should retain if used', function() {
-			let css = ":root{--red: #f00; }div{color: var(--red);}}";
+      const { css: out } = dropcss({
+        html: '<div class="a--b"></div><div class="--c"></div>',
+        css,
+      });
+      assert.strictEqual(out, css);
+    });
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	css,
-			});
-			assert.strictEqual(out, ":root{--red: #f00;}div{color: var(--red);}");
-		});
+    it('should retain if used', function () {
+      const css = ':root{--red: #f00;}div{color: var(--red);}';
 
-		it('should drop if unused', function() {
-			let css = ":root{--red: #f00; }";
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css,
+      });
+      assert.strictEqual(out, css);
+    });
 
-			let {css: out} = dropcss({
-				html:	'<div></div>',
-				css:	css,
-			});
-			assert.strictEqual(out, "");
-		});
-	});
+    it('should drop if unused', function () {
+      const { css: out } = dropcss({
+        html: '<div></div>',
+        css: ':root{--red: #f00; }',
+      });
+      assert.strictEqual(out, '');
+    });
+  });
 });

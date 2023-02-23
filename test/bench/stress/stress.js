@@ -1,53 +1,89 @@
+/* eslint-disable no-console */
 const fs = require('fs');
 
-const dropcss = require('../../../dist/dropcss.cjs.js');
+const dropcss = require('../../../dist/dropcss.cjs');
 const Purgecss = require('purgecss');
 const uncss = require('uncss');
-const purify = require("purify-css");
-//const minimalcss = require('minimalcss');
+const purify = require('purify-css');
+// const minimalcss = require('minimalcss');
 
-const vkbeautify = require('../lib/vkbeautify');
+const vkbeautify = require('../../lib/vkbeautify');
 
-const css = fs.readFileSync('./input/bootstrap.min.css', 'utf8') + fs.readFileSync('./input/bulma.min.css', 'utf8');
+const css =
+  fs.readFileSync('./input/bootstrap.min.css', 'utf8') +
+  fs.readFileSync('./input/bulma.min.css', 'utf8');
 const html = fs.readFileSync('./input/surveillance.html', 'utf8');
 
-let res, start;
+let res;
+let start;
 
 // DropCSS
 start = +new Date();
+
 res = dropcss({
-	css,
-	html,
+  css,
+  html,
 });
-console.log(['DropCSS', (+new Date() - start) + 'ms', (res.css.length / 1024).toFixed(2) + " KB"]);
+
+console.log([
+  'DropCSS',
+  `${+new Date() - start}ms`,
+  `${(res.css.length / 1024).toFixed(2)} KB`,
+]);
+
 fs.writeFileSync('./output/dropcss.css', res.css, 'utf8');
 fs.writeFileSync('./output/dropcss.pretty.css', vkbeautify(res.css), 'utf8');
 
 // PurgeCSS
 start = +new Date();
-let purgeCss = new Purgecss({
-    content: [{raw: html, extension: 'html'}],
-	css: [{raw: css}],
+
+const purgeCss = new Purgecss({
+  content: [{ raw: html, extension: 'html' }],
+  css: [{ raw: css }],
 });
-res = purgeCss.purge()[0];
-console.log(['PurgeCSS', (+new Date() - start) + 'ms', (res.css.length / 1024).toFixed(2) + " KB"]);
+
+[res] = purgeCss.purge();
+
+console.log([
+  'PurgeCSS',
+  `${+new Date() - start}ms`,
+  `${(res.css.length / 1024).toFixed(2)} KB`,
+]);
+
 fs.writeFileSync('./output/purgecss.css', res.css, 'utf8');
 fs.writeFileSync('./output/purgecss.pretty.css', vkbeautify(res.css), 'utf8');
 
 // PurifyCSS
 start = +new Date();
-res = purify(html, css, {minify: true});
-console.log(['PurifyCSS', (+new Date() - start) + 'ms', (res.length / 1024).toFixed(2) + " KB"]);
+
+res = purify(html, css, { minify: true });
+
+console.log([
+  'PurifyCSS',
+  `${+new Date() - start}ms`,
+  `${(res.length / 1024).toFixed(2)} KB`,
+]);
+
 fs.writeFileSync('./output/purifycss.css', res, 'utf8');
 fs.writeFileSync('./output/purifycss.pretty.css', vkbeautify(res), 'utf8');
 
 // UnCSS
-let htmlExtern = html.replace(/<script\s*[^>]+><\/script>|<link\s*[^>]+?stylesheet.*?>/gm, '');
+const htmlExtern = html.replace(
+  /<script\s*[^>]+><\/script>|<link\s*[^>]+?stylesheet.*?>/gm,
+  ''
+);
+
 start = +new Date();
-uncss(htmlExtern, {raw: css}, function(error, output) {
-	console.log(['UnCSS', (+new Date() - start) + 'ms', (output.length / 1024).toFixed(2) + " KB"]);
-	fs.writeFileSync('./output/uncss.css', output, 'utf8');
-	fs.writeFileSync('./output/uncss.pretty.css', vkbeautify(output), 'utf8');
+
+uncss(htmlExtern, { raw: css }, (_, output) => {
+  console.log([
+    'UnCSS',
+    `${+new Date() - start}ms`,
+    `${(output.length / 1024).toFixed(2)} KB`,
+  ]);
+
+  fs.writeFileSync('./output/uncss.css', output, 'utf8');
+  fs.writeFileSync('./output/uncss.pretty.css', vkbeautify(output), 'utf8');
 });
 
 /*

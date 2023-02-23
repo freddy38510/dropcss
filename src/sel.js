@@ -1,133 +1,116 @@
 import { takeUntilMatchedClosing } from './css';
-import { parseErr } from './err';
+import parseErr from './err';
 
-const pseudoClasses = /not|is|has/
+const pseudoClasses = /not|is|has/;
 
 // assumes stripPseudos(sel); has already been called
 export function parse(sel) {
-	const RE = {
-		IDENT:	/([\w*-]+)/iy,
-		ATTR:	/([\w-]+)(?:(.?=)["']?([^\]]*?)["']?)?\]/iy,
-		PSEUDO: /([\w-]+)(\()?/iy,
-		MODE:	/\s*[:.#\[]\s*/iy,
-		COMB:	/\s*[>~+]\s*|\s+/iy
-	};
+  const RE = {
+    IDENT: /([\w*-]+)/iy,
+    ATTR: /([\w-]+)(?:(.?=)["']?([^\]]*?)["']?)?\]/iy,
+    PSEUDO: /([\w-]+)(\()?/iy,
+    MODE: /\s*[:.#[]\s*/iy,
+    COMB: /\s*[>~+]\s*|\s+/iy,
+  };
 
-	let idx = 0;
-	let toks = [];
-	let m;
-	let lastComb = -1;
+  const toks = [];
+  let idx = 0;
+  let m;
+  let lastComb = -1;
 
-	function setIdx(re) {
-		idx = re.lastIndex;
-		for (let k in RE)
-			RE[k].lastIndex = idx;
-	}
+  function setIdx(re) {
+    idx = re.lastIndex;
+    Object.keys(RE).forEach((k) => {
+      RE[k].lastIndex = idx;
+    });
+  }
 
-	function next() {
-		let matched = false;
+  function next() {
+    let matched = false;
 
-		if (m = RE.COMB.exec(sel)) {
-			matched = true;
+    if ((m = RE.COMB.exec(sel))) {
+      matched = true;
 
-			let mode = m[0].trim();
+      let mode = m[0].trim();
 
-			if (mode == '')
-				mode = ' ';
+      if (mode === '') mode = ' ';
 
-			toks.push(mode);
-			setIdx(RE.COMB);
-			lastComb = toks.length - 1;
-		}
-		else if (m = RE.MODE.exec(sel)) {
-			matched = true;
+      toks.push(mode);
+      setIdx(RE.COMB);
+      lastComb = toks.length - 1;
+    } else if ((m = RE.MODE.exec(sel))) {
+      matched = true;
 
-			let mode = m[0].trim();
+      const mode = m[0].trim();
 
-			setIdx(RE.MODE);
+      setIdx(RE.MODE);
 
-			if (mode == ':') {
-				m = RE.PSEUDO.exec(sel);
+      if (mode === ':') {
+        m = RE.PSEUDO.exec(sel);
 
-				if (m[2] == '(') {
-					let subsel = takeUntilMatchedClosing(sel, RE.PSEUDO.lastIndex, '(', ')');
-					RE.PSEUDO.lastIndex += subsel.length + 1;
-					m[2] = pseudoClasses.test(m[1]) ? parse(subsel) : subsel;
-				}
+        if (m[2] === '(') {
+          const subsel = takeUntilMatchedClosing(
+            sel,
+            RE.PSEUDO.lastIndex,
+            '(',
+            ')'
+          );
 
-				toks.splice(
-					lastComb + 1,
-					0,
-					m[2],
-					m[1],
-					mode
-				);
-				setIdx(RE.PSEUDO);
-			}
-			else if (mode == '[') {
-				m = RE.ATTR.exec(sel);
-				toks.splice(
-					lastComb + 1,
-					0,
-					m[3],
-					m[2],
-					m[1],
-					mode,
-				);
-				setIdx(RE.ATTR);
-			}
-			else {
-				m = RE.IDENT.exec(sel);
-				toks.push(m[1], mode);
-				setIdx(RE.IDENT);
-			}
-		}
-		else if (m = RE.IDENT.exec(sel)) {
-			matched = true;
-			toks.push(m[1], '_');
-			setIdx(RE.IDENT);
-		}
+          RE.PSEUDO.lastIndex += subsel.length + 1;
+          m[2] = pseudoClasses.test(m[1]) ? parse(subsel) : subsel;
+        }
 
-		return matched;
-	}
+        toks.splice(lastComb + 1, 0, m[2], m[1], mode);
+        setIdx(RE.PSEUDO);
+      } else if (mode === '[') {
+        m = RE.ATTR.exec(sel);
+        toks.splice(lastComb + 1, 0, m[3], m[2], m[1], mode);
+        setIdx(RE.ATTR);
+      } else {
+        m = RE.IDENT.exec(sel);
+        toks.push(m[1], mode);
+        setIdx(RE.IDENT);
+      }
+    } else if ((m = RE.IDENT.exec(sel))) {
+      matched = true;
+      toks.push(m[1], '_');
+      setIdx(RE.IDENT);
+    }
 
-	let prevPos = idx;
+    return matched;
+  }
 
-	while (idx < sel.length) {
-		next();
+  let prevPos = idx;
 
-		if (prevPos === idx)
-			parseErr('sel', sel, idx);
+  while (idx < sel.length) {
+    next();
 
-		prevPos = idx;
-	}
+    if (prevPos === idx) parseErr('sel', sel, idx);
 
-	return toks;
+    prevPos = idx;
+  }
+
+  return toks;
 }
 
 const RE_NTH = /^([+-]?\d*)?n([+-]\d+)?$/;
 
 export function parseNth(expr) {
-	let m = RE_NTH.exec(expr);
+  const m = RE_NTH.exec(expr);
 
-	if (m != null) {
-		let a = m[1];
-		let b = m[2];
+  if (m !== null) {
+    let a = m[1];
+    let b = m[2];
 
-		if (a == null || a == "+")
-			a = 1;
-		else if (a == "-")
-			a = -1;
-		else
-			a = +a;
+    if (a == null || a === '+') a = 1;
+    else if (a === '-') a = -1;
+    else a = +a;
 
-		if (b == null)
-			b = 0;
-		else
-			b = +b;
+    if (b == null) b = 0;
+    else b = +b;
 
-		return [a, b];
-	}
+    return [a, b];
+  }
 
-	return [0, 0];
+  return [0, 0];
 }

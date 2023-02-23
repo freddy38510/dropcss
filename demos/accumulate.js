@@ -1,7 +1,7 @@
-const dropcss = require('../dist/dropcss.cjs.js');
+const dropcss = require('../src/dropcss');
 
 // super mega-huge combined stylesheet
-let css = `
+const css = `
 	em {
 		color: red;
 	}
@@ -16,7 +16,7 @@ let css = `
 `;
 
 // html of page (or state) A
-let htmlA = `
+const htmlA = `
 	<html>
 		<head></head>
 		<body>
@@ -26,7 +26,7 @@ let htmlA = `
 `;
 
 // html of page (or state) B
-let htmlB = `
+const htmlB = `
 	<html>
 		<head></head>
 		<body>
@@ -36,29 +36,30 @@ let htmlB = `
 `;
 
 // whitelist
-let whitelist = new Set();
+const whitelist = new Set();
 
-let resA = dropcss({
-	css,
-	html: htmlA,
+const resA = dropcss({
+  css,
+  html: htmlA,
 });
 
 // accumulate retained A selectors
-resA.sels.forEach(sel => whitelist.add(sel));
+resA.sels.forEach((sel) => whitelist.add(sel));
 
-let resB = dropcss({
-	css,
-	html: htmlB,
+const resB = dropcss({
+  css,
+  html: htmlB,
 });
 
 // accumulate retained B selectors
-resB.sels.forEach(sel => whitelist.add(sel));
+resB.sels.forEach((sel) => whitelist.add(sel));
 
 // final purge relying only on accumulated whitelist
-let cleaned = dropcss({
-	html: '',
-	css,
-	shouldDrop: sel => !whitelist.has(sel),
+const cleaned = dropcss({
+  html: '',
+  css,
+  shouldDrop: (sel) => !whitelist.has(sel),
 });
 
+// eslint-disable-next-line no-console
 console.log(cleaned.css);
